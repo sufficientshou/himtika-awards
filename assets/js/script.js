@@ -1,8 +1,6 @@
 (function($) {
-	
 	"use strict";
 	
-	//Hide Loading Box (Preloader)
 	function handlePreloader() {
 		if($('.preloader').length){
 			$('body').addClass('page-loaded');
@@ -10,62 +8,29 @@
 		}
 	}
 	
-	//Update Header Style and Scroll to Top
 	function headerStyle() {
-		// if($('.main-header').length){
-		// 	var windowpos = $(window).scrollTop();
-		// 	var headerUpper = $('.header-upper');
-		// 	var headerTop = $('.header-top');
-		// 	var scrollLink = $('.scroll-to-top');
-			
-		// 	// Cek jika scroll lebih dari 100px
-		// 	if (windowpos > 136) {
-		// 		// Menambahkan kelas sticky pada header-upper
-		// 		headerUpper.addClass('sticky');
-		// 		// Menyembunyikan header-top
-		// 		headerTop.fadeOut(300);
-		// 		// Menampilkan scroll-to-top
-		// 		scrollLink.fadeIn(1000);
-		// 	} else {
-		// 		// Menghapus kelas sticky pada header-upper
-		// 		headerUpper.removeClass('sticky');
-		// 		// Menampilkan kembali header-top
-		// 		headerTop.fadeIn(300);
-		// 		// Menyembunyikan scroll-to-top
-		// 		scrollLink.fadeOut(300);
-		// 	}
-		// }
 		if($('.main-header').length){
 			var scrollY = $(window).scrollTop();
 			var header = $('.main-header');
-			var headerTop = $('.header-top'); // Marquee lo
+			var headerTop = $('.header-top');
 
 			if (scrollY <= 400) {
-				// STATE: ATAS (Sticky/Absolute)
 				header.removeClass('header-fixed').addClass('header-absolute');
 				header.css({
 					"transform": "translateY(0)",
 					"opacity": "1"
 				});
-				// Marquee tetap tampil di atas
-				// headerTop.show(); 
-				
 			} else if (scrollY > 400 && scrollY <= 550) {
-				// STATE: SEMBUNYI (Transisi kabur ke atas)
 				header.css({
 					"transform": "translateY(-100px)",
 					"opacity": "0"
 				});
-				
 			} else {
-				// STATE: BAWAH (Fixed Glassy)
 				header.addClass('header-fixed').removeClass('header-absolute');
 				header.css({
 					"transform": "translateY(0)",
 					"opacity": "1"
 				});
-				// Marquee diumpetin pas lagi melayang biar ringkas
-				// headerTop.hide();
 			}
 		}
 	}
@@ -74,53 +39,43 @@
 		headerStyle();
 	});
 	
-	
 	headerStyle();
 
 	$(window).on('scroll', function() {
 		headerStyle();
 	});
 
-	//Submenu Dropdown Toggle
 	if($('.main-header li.dropdown ul').length){
 		$('.main-header .navigation li.dropdown').append('<div class="dropdown-btn"><span class="fa fa-angle-right"></span></div>');
-		
 	}
 
-	//Mobile Nav Hide Show
 	if($('.mobile-menu').length){
-		
 		$('.mobile-menu .menu-box').mCustomScrollbar();
 		
 		var mobileMenuContent = $('.main-header .nav-outer .main-menu').html();
 		$('.mobile-menu .menu-box .menu-outer').append(mobileMenuContent);
 		$('.sticky-header .main-menu').append(mobileMenuContent);
 		
-		//Dropdown Button
 		$('.mobile-menu li.dropdown .dropdown-btn').on('click', function() {
 			$(this).toggleClass('open');
 			$(this).prev('ul').slideToggle(500);
 		});
-		//Menu Toggle Btn
+
 		$('.mobile-nav-toggler').on('click', function() {
 			$('body').addClass('mobile-menu-visible');
 		});
 
-		//Menu Toggle Btn
 		$('.mobile-menu .menu-backdrop,.mobile-menu .close-btn').on('click', function() {
 			$('body').removeClass('mobile-menu-visible');
 		});
 	}
 
-	// Scroll to a Specific Div
 	if($('.scroll-to-target').length){
 		$(".scroll-to-target").on('click', function() {
 			var target = $(this).attr('data-target');
-		   // animate
-		   $('html, body').animate({
-			   scrollTop: $(target).offset().top
-			 }, 1500);
-	
+			$('html, body').animate({
+				scrollTop: $(target).offset().top
+			}, 1500);
 		});
 	}
 
@@ -135,7 +90,6 @@
 		}
 	});
 
-	// Fungsi Klik: Balik ke Atas
 	$('#backToTop').on('click', function(e) {
 		e.preventDefault();
 		$('html, body').animate({
@@ -143,10 +97,63 @@
 		}, 0);
 	});
 	
-	// Loading masuk page akan di gantikan dengan fungsi berikut
+	function initTypewriter() {
+		var $target = $('#typewriter-text');
+		if (!$target.length) return;
+
+		var text = 'Awards';
+		var charIndex = 0;
+		var isDeleting = false;
+
+		$target.text('');
+
+		function type() {
+			$target.text(text.substring(0, charIndex));
+
+			var typingSpeed = isDeleting ? 90 : 150;
+
+			if (!isDeleting && charIndex === text.length) {
+				typingSpeed = 2500;
+				isDeleting = true;
+			} else if (isDeleting && charIndex === 0) {
+				isDeleting = false;
+				typingSpeed = 400;
+			}
+
+			charIndex += isDeleting ? -1 : 1;
+
+			setTimeout(type, typingSpeed);
+		}
+
+		setTimeout(type, 600);
+	}
+
+	function initAwardTabs() {
+		$('.awards-tab-btn').on('click', function() {
+			var filterValue = $(this).attr('data-filter');
+
+			$('.awards-tab-btn').removeClass('active');
+			$(this).addClass('active');
+
+			if (filterValue === 'all') {
+				$('.award-card-item').removeClass('hide').fadeIn(400);
+			} else {
+				$('.award-card-item').each(function() {
+					var category = $(this).attr('data-category');
+					if (category === filterValue) {
+						$(this).removeClass('hide').fadeIn(400);
+					} else {
+						$(this).addClass('hide').fadeOut(200);
+					}
+				});
+			}
+		});
+	}
 	
 	$(window).on('load', function() {
 		handlePreloader();
+		initTypewriter();
+		initAwardTabs();
 	});	
 
 })(window.jQuery);

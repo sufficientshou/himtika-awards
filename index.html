@@ -4,18 +4,13 @@
 <head>
     <meta charset="utf-8">
     <title>Himtika Awards - Himpunan Mahasiswa Informatika Unsika</title>
-
-    
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/responsive.css" rel="stylesheet">
     <link href="assets/css/animated.css" rel="stylesheet">
     <link href="assets/css/scrollbar.css" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="shortcut icon" href="assets/img/logo/Himtika.png" type="image/x-icon">
     <link rel="icon" href="assets/img/logo/Himtika.png" type="image/x-icon">
-
-    
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 </head>
@@ -178,12 +173,12 @@
             <div class="hero-container">
                 <div class="hero-content">
                     <h1 class="hero-title">
-                        HIMTIKA <span class="hero-title-highlight">Awards</span>
+                        HIMTIKA <span class="hero-title-highlight" id="typewriter-text">Awards</span><span class="typewriter-cursor"></span>
                     </h1>
                     <p class="hero-description">
                         HIMTIKA Awards merupakan agenda dimana kita memberikan penghargaan kepada pengurus maupun mahasiswa Informatika terbaik atas kontribusinya selama di HIMTIKA serta diperlukannya wadah apresiasi sebagai pemicu kinerja pengurus untuk periode selanjutnya.
                     </p>
-                    <a href="#" class="hero-btn">
+                    <a href="#awards" class="hero-btn">
                         <span>Explore Awards!</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10"></circle>
@@ -191,6 +186,138 @@
                             <line x1="12" y1="8" x2="12" y2="16"></line>
                         </svg>
                     </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="awards-section" id="awards">
+            <div class="auto-container">
+                <div class="awards-section-header text-center">
+                    <h2 class="awards-section-title">
+                        Kategori <span class="hero-title-highlight">Awards</span>
+                    </h2>
+                    <p class="awards-section-subtitle">
+                        Pilih fase penghargaan untuk melihat daftar kategori dan nominasi HIMTIKA Awards
+                    </p>
+                </div>
+
+                <div class="awards-tab-wrapper">
+                    <div class="awards-tab-container">
+                        <button class="awards-tab-btn active" data-filter="all">
+                            <i class="fas fa-th-large"></i>
+                            <span>Semua</span>
+                        </button>
+                        <button class="awards-tab-btn" data-filter="phase1">
+                            <span>Phase 1</span>
+                        </button>
+                        <button class="awards-tab-btn" data-filter="phase2">
+                            <span>Phase 2</span>
+                        </button>
+                        <button class="awards-tab-btn" data-filter="phase3">
+                            <span>Phase 3</span>
+                        </button>
+                        <button class="awards-tab-btn" data-filter="phase4">
+                            <span>Phase 4</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="awards-grid">
+                    <div class="award-card-item" data-category="phase1">
+                        <div class="award-card-inner">
+                            <div class="award-card-top">
+                                <span class="award-badge">Phase 1</span>
+                                <div class="award-icon-box">
+                                    <i class="fas fa-award"></i>
+                                </div>
+                            </div>
+                            <h3 class="award-card-title">Pengurus Teraktif</h3>
+                            <p class="award-card-desc">Penghargaan khusus untuk pengurus HIMTIKA dengan tingkat keaktifan, dedikasi, dan kontribusi tinggi.</p>
+                            <div class="award-card-footer">
+                                <span class="award-status active">Voting Dibuka</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="award-card-item" data-category="phase1">
+                        <div class="award-card-inner">
+                            <div class="award-card-top">
+                                <span class="award-badge">Phase 1</span>
+                                <div class="award-icon-box">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                            <h3 class="award-card-title">Divisi Terfavorit</h3>
+                            <p class="award-card-desc">Apresiasi bagi divisi dengan kerja sama tim, kekompakan, dan eksekusi proker terbaik.</p>
+                            <div class="award-card-footer">
+                                <span class="award-status active">Voting Dibuka</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="award-card-item" data-category="phase2">
+                        <div class="award-card-inner">
+                            <div class="award-card-top">
+                                <span class="award-badge">Phase 2</span>
+                                <div class="award-icon-box">
+                                    <i class="fas fa-laptop-code"></i>
+                                </div>
+                            </div>
+                            <h3 class="award-card-title">Mahasiswa Berprestasi</h3>
+                            <p class="award-card-desc">Penghargaan untuk mahasiswa Informatika dengan capaian prestasi akademik maupun kejuaraan.</p>
+                            <div class="award-card-footer">
+                                <span class="award-status upcoming">Phase 2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="award-card-item" data-category="phase2">
+                        <div class="award-card-inner">
+                            <div class="award-card-top">
+                                <span class="award-badge">Phase 2</span>
+                                <div class="award-icon-box">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                            </div>
+                            <h3 class="award-card-title">Best IT Innovator</h3>
+                            <p class="award-card-desc">Apresiasi untuk inovasi karya aplikasi dan proyek teknologi kreatif mahasiswa Informatika.</p>
+                            <div class="award-card-footer">
+                                <span class="award-status upcoming">Phase 2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="award-card-item" data-category="phase3">
+                        <div class="award-card-inner">
+                            <div class="award-card-top">
+                                <span class="award-badge">Phase 3</span>
+                                <div class="award-icon-box">
+                                    <i class="fas fa-user-graduate"></i>
+                                </div>
+                            </div>
+                            <h3 class="award-card-title">Kader Terdepan</h3>
+                            <p class="award-card-desc">Kategori apresiasi bagi kader muda teraktif dalam pengembangan organisasi HIMTIKA.</p>
+                            <div class="award-card-footer">
+                                <span class="award-status upcoming">Phase 3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="award-card-item" data-category="phase4">
+                        <div class="award-card-inner">
+                            <div class="award-card-top">
+                                <span class="award-badge">Phase 4</span>
+                                <div class="award-icon-box">
+                                    <i class="fas fa-crown"></i>
+                                </div>
+                            </div>
+                            <h3 class="award-card-title">Lifetime Achievement</h3>
+                            <p class="award-card-desc">Penghargaan kehormatan tertinggi atas dedikasi dan jejak kontribusi besar bagi HIMTIKA.</p>
+                            <div class="award-card-footer">
+                                <span class="award-status upcoming">Phase 4</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -302,9 +429,7 @@
             </div>
         </footer>
         
-
     </div>
-    
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/scrollbar.js"></script>
     <script src="assets/js/script.js"></script>
