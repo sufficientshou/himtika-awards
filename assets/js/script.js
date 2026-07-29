@@ -70,6 +70,18 @@
 		});
 	}
 
+	$(document).on('click', 'a[href^="#"]', function(e) {
+		var targetId = $(this).attr('href');
+		if (targetId && targetId !== '#' && $(targetId).length) {
+			e.preventDefault();
+			var targetPosition = $(targetId).offset().top - 40;
+			window.scrollTo({
+				top: targetPosition,
+				behavior: 'smooth'
+			});
+		}
+	});
+
 	if($('.scroll-to-target').length){
 		$(".scroll-to-target").on('click', function() {
 			var target = $(this).attr('data-target');
@@ -129,25 +141,38 @@
 	}
 
 	function initAwardTabs() {
-		$('.awards-tab-btn').on('click', function() {
-			var filterValue = $(this).attr('data-filter');
+		function filterCards(filterValue) {
+			$('.award-card-item').each(function() {
+				var category = $(this).attr('data-category');
+				var status = $(this).attr('data-status');
+				var isUpcoming = status === 'upcoming' || $(this).find('.award-status.upcoming').length > 0;
 
-			$('.awards-tab-btn').removeClass('active');
-			$(this).addClass('active');
-
-			if (filterValue === 'all') {
-				$('.award-card-item').removeClass('hide').fadeIn(400);
-			} else {
-				$('.award-card-item').each(function() {
-					var category = $(this).attr('data-category');
+				if (filterValue === 'all') {
+					if (isUpcoming) {
+						$(this).addClass('hide').fadeOut(200);
+					} else {
+						$(this).removeClass('hide').fadeIn(400);
+					}
+				} else {
 					if (category === filterValue) {
 						$(this).removeClass('hide').fadeIn(400);
 					} else {
 						$(this).addClass('hide').fadeOut(200);
 					}
-				});
-			}
+				}
+			});
+		}
+
+		$('.awards-tab-btn').on('click', function() {
+			var filterValue = $(this).attr('data-filter');
+			$('.awards-tab-btn').removeClass('active');
+			$(this).addClass('active');
+
+			filterCards(filterValue);
 		});
+
+		var initialFilter = $('.awards-tab-btn.active').attr('data-filter') || 'all';
+		filterCards(initialFilter);
 	}
 	
 	$(window).on('load', function() {
