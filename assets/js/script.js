@@ -142,23 +142,59 @@
 
 	function initAwardTabs() {
 		function filterCards(filterValue) {
-			$('.award-card-item').each(function() {
-				var category = $(this).attr('data-category');
-				var status = $(this).attr('data-status');
-				var isUpcoming = status === 'upcoming' || $(this).find('.award-status.upcoming').length > 0;
+			var visibleIndex = 0;
 
-				if (filterValue === 'all') {
-					if (isUpcoming) {
-						$(this).addClass('hide').fadeOut(200);
-					} else {
-						$(this).removeClass('hide').fadeIn(400);
-					}
-				} else {
-					if (category === filterValue) {
-						$(this).removeClass('hide').fadeIn(400);
-					} else {
-						$(this).addClass('hide').fadeOut(200);
-					}
+			$('.award-card-item').each(function() {
+				var $card = $(this);
+				var category = $card.attr('data-category');
+				var status = $card.attr('data-status');
+				var isUpcoming = status === 'upcoming' || $card.find('.award-status.upcoming').length > 0;
+
+				var shouldShow = (filterValue === 'all') ? !isUpcoming : (category === filterValue);
+
+				if (!shouldShow) {
+					$card.stop(true, true).addClass('hide').css({
+						'opacity': '0',
+						'transform': ''
+					});
+				}
+			});
+
+			$('.award-card-item').each(function() {
+				var $card = $(this);
+				var category = $card.attr('data-category');
+				var status = $card.attr('data-status');
+				var isUpcoming = status === 'upcoming' || $card.find('.award-status.upcoming').length > 0;
+
+				var shouldShow = (filterValue === 'all') ? !isUpcoming : (category === filterValue);
+
+				if (shouldShow) {
+					var delay = visibleIndex * 60;
+					visibleIndex++;
+
+					$card.removeClass('hide');
+					$card.stop(true, true).css({
+						'opacity': '0',
+						'transform': 'scale(0.92) translateY(14px)'
+					});
+
+					setTimeout(function() {
+						$card.animate({
+							'opacity': 1
+						}, {
+							duration: 300,
+							step: function(now, fx) {
+								if (fx.prop === 'opacity') {
+									var scale = 0.92 + (0.08 * now);
+									var transY = 14 * (1 - now);
+									$card.css('transform', 'scale(' + scale + ') translateY(' + transY + 'px)');
+								}
+							},
+							complete: function() {
+								$card.css({'opacity': '', 'transform': ''});
+							}
+						});
+					}, delay);
 				}
 			});
 		}
@@ -168,17 +204,106 @@
 			$('.awards-tab-btn').removeClass('active');
 			$(this).addClass('active');
 
+			$('#awardsGrid').scrollLeft(0);
 			filterCards(filterValue);
 		});
 
 		var initialFilter = $('.awards-tab-btn.active').attr('data-filter') || 'all';
 		filterCards(initialFilter);
 	}
-	
+
+	if ($.easing) {
+		$.easing.smoothSlide = function(x, t, b, c, d) {
+			return c * (1 - Math.pow(1 - t / d, 4)) + b;
+		};
+	}
+
+	function initAwardsSlider() {
+		var $grid = $('#awardsGrid');
+		var isSliding = false;
+
+		$('#awardsNextBtn').on('click', function(e) {
+			e.preventDefault();
+			if (isSliding) return;
+
+			var $visibleCards = $grid.find('.award-card-item:not(.hide)');
+			if ($visibleCards.length <= 1) return;
+
+			var $firstCard = $visibleCards.first();
+			var cardWidth = $firstCard.outerWidth(true) || 300;
+
+			isSliding = true;
+			$grid.stop(true, true).animate({
+				scrollLeft: $grid.scrollLeft() + cardWidth
+			}, 420, 'smoothSlide', function() {
+				$grid.append($firstCard);
+				$grid.scrollLeft($grid.scrollLeft() - cardWidth);
+				isSliding = false;
+			});
+		});
+
+		$('#awardsPrevBtn').on('click', function(e) {
+			e.preventDefault();
+			if (isSliding) return;
+
+			var $visibleCards = $grid.find('.award-card-item:not(.hide)');
+			if ($visibleCards.length <= 1) return;
+
+			var $lastCard = $visibleCards.last();
+			var cardWidth = $lastCard.outerWidth(true) || 300;
+
+			isSliding = true;
+			$grid.prepend($lastCard);
+			$grid.scrollLeft($grid.scrollLeft() + cardWidth);
+
+			$grid.stop(true, true).animate({
+				scrollLeft: $grid.scrollLeft() - cardWidth
+			}, 420, 'smoothSlide', function() {
+				isSliding = false;
+			});
+		});
+	}
+
+	function initCardLightbox() {
+		var $modal = $('#imageLightbox');
+		var $modalImg = $('#lightboxImg');
+		var $modalTitle = $('#lightboxTitle');
+
+		$(document).on('click', '.award-card-item', function() {
+			var $img = $(this).find('.award-card-img');
+			if ($img.length && $img.attr('src')) {
+				var imgSrc = $img.attr('src');
+				var titleText = $(this).find('.award-card-title').text() || '';
+
+				$modalImg.attr('src', imgSrc);
+				$modalTitle.text(titleText);
+				$modal.addClass('active');
+				$('body').css('overflow', 'hidden');
+			}
+		});
+
+		function closeModal() {
+			$modal.removeClass('active');
+			$('body').css('overflow', '');
+		}
+
+		$('#lightboxClose, .lightbox-backdrop').on('click', function() {
+			closeModal();
+		});
+
+		$(document).on('keydown', function(e) {
+			if (e.key === 'Escape' && $modal.hasClass('active')) {
+				closeModal();
+			}
+		});
+	}
+
 	$(window).on('load', function() {
 		handlePreloader();
 		initTypewriter();
 		initAwardTabs();
+		initAwardsSlider();
+		initCardLightbox();
 	});	
 
 })(window.jQuery);
