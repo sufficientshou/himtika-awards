@@ -218,50 +218,92 @@
 		};
 	}
 
-	function initAwardsSlider() {
+	function initAwardsDots() {
 		var $grid = $('#awardsGrid');
-		var isSliding = false;
+		var $dotsContainer = $('#awardsDots');
 
-		$('#awardsNextBtn').on('click', function(e) {
-			e.preventDefault();
-			if (isSliding) return;
+		function getVisibleCards() {
+			return $grid.find('.award-card-item:not(.hide)');
+		}
 
-			var $visibleCards = $grid.find('.award-card-item:not(.hide)');
-			if ($visibleCards.length <= 1) return;
+		function resetCardOrder() {
+			var $visible = getVisibleCards();
+			if ($visible.length <= 1) return;
 
-			var $firstCard = $visibleCards.first();
-			var cardWidth = $firstCard.outerWidth(true) || 300;
-
-			isSliding = true;
-			$grid.stop(true, true).animate({
-				scrollLeft: $grid.scrollLeft() + cardWidth
-			}, 420, 'smoothSlide', function() {
-				$grid.append($firstCard);
-				$grid.scrollLeft($grid.scrollLeft() - cardWidth);
-				isSliding = false;
+			var sortedCards = $visible.toArray().sort(function(a, b) {
+				var idxA = parseInt($(a).attr('data-card-index'), 10) || 0;
+				var idxB = parseInt($(b).attr('data-card-index'), 10) || 0;
+				return idxA - idxB;
 			});
+
+			$.each(sortedCards, function(i, el) {
+				$grid.append(el);
+			});
+
+			$grid.scrollLeft(0);
+		}
+
+		function updateActiveDot() {
+			var $visible = getVisibleCards();
+			if (!$visible.length) return;
+
+			var cardWidth = $visible.first().outerWidth(true) || $grid.width();
+			if (!cardWidth) return;
+
+			var scrollPos = $grid.scrollLeft();
+			var activeIndex = Math.round(scrollPos / cardWidth);
+
+			if (activeIndex < 0) activeIndex = 0;
+			if (activeIndex >= $visible.length) activeIndex = $visible.length - 1;
+
+			$dotsContainer.find('.award-dot').removeClass('active');
+			$dotsContainer.find('.award-dot').eq(activeIndex).addClass('active');
+		}
+
+		function renderDots() {
+			$dotsContainer.empty();
+			resetCardOrder();
+			var $visibleCards = getVisibleCards();
+
+			if ($visibleCards.length <= 1) {
+				$dotsContainer.addClass('hide');
+				return;
+			} else {
+				$dotsContainer.removeClass('hide');
+			}
+
+			$visibleCards.each(function(i) {
+				var $dot = $('<button>', {
+					class: 'award-dot' + (i === 0 ? ' active' : ''),
+					'data-dot-index': i,
+					'aria-label': 'Go to card ' + (i + 1)
+				});
+
+				$dot.on('click', function(e) {
+					e.preventDefault();
+					var cardWidth = $visibleCards.first().outerWidth(true) || $grid.width();
+					$grid.stop(true, true).animate({
+						scrollLeft: i * cardWidth
+					}, 350);
+				});
+
+				$dotsContainer.append($dot);
+			});
+
+			updateActiveDot();
+		}
+
+		$grid.off('scroll.dots').on('scroll.dots', function() {
+			updateActiveDot();
 		});
 
-		$('#awardsPrevBtn').on('click', function(e) {
-			e.preventDefault();
-			if (isSliding) return;
-
-			var $visibleCards = $grid.find('.award-card-item:not(.hide)');
-			if ($visibleCards.length <= 1) return;
-
-			var $lastCard = $visibleCards.last();
-			var cardWidth = $lastCard.outerWidth(true) || 300;
-
-			isSliding = true;
-			$grid.prepend($lastCard);
-			$grid.scrollLeft($grid.scrollLeft() + cardWidth);
-
-			$grid.stop(true, true).animate({
-				scrollLeft: $grid.scrollLeft() - cardWidth
-			}, 420, 'smoothSlide', function() {
-				isSliding = false;
-			});
+		$('.awards-tab-btn').off('click.dots').on('click.dots', function() {
+			setTimeout(function() {
+				renderDots();
+			}, 350);
 		});
+
+		renderDots();
 	}
 
 	function initCardLightbox() {
@@ -302,7 +344,7 @@
 		handlePreloader();
 		initTypewriter();
 		initAwardTabs();
-		initAwardsSlider();
+		initAwardsDots();
 		initCardLightbox();
 	});	
 
