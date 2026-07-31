@@ -2030,11 +2030,13 @@ li {
 	}
 
 	.awards-slider-wrapper {
-		max-width: 310px;
+		width: 100%;
+		max-width: 320px;
 		margin: 0 auto;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		overflow: hidden;
 	}
 
 	.awards-dots-container {
@@ -2067,16 +2069,16 @@ li {
 		height: 10px;
 		border-radius: 100px;
 		background: #D6C26A;
-		box-shadow: 0 0 12px rgba(214, 194, 106, 0.65);
 	}
 
 	.awards-grid {
 		display: flex !important;
 		flex-wrap: nowrap !important;
+		justify-content: flex-start !important;
 		overflow-x: auto !important;
 		scroll-snap-type: x mandatory !important;
 		-webkit-overflow-scrolling: touch;
-		padding: 10px 0 !important;
+		padding: 10px 0 !important; 
 		gap: 0 !important;
 		width: 100% !important;
 		border-radius: 16px;
@@ -2092,10 +2094,16 @@ li {
 		width: 100% !important;
 		max-width: 100% !important;
 		min-width: 100% !important;
-		scroll-snap-align: start;
+		scroll-snap-align: center;
 		scroll-snap-stop: always;
 		margin: 0 !important;
 		box-sizing: border-box;
+	}
+
+	.award-card-img {
+		pointer-events: none !important;
+		-webkit-user-drag: none !important;
+		user-select: none !important;
 	}
 
 	.award-card-item:hover .award-card-inner {

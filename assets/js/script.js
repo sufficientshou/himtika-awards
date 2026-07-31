@@ -1,15 +1,15 @@
-(function($) {
+(function ($) {
 	"use strict";
-	
+
 	function handlePreloader() {
-		if($('.preloader').length){
+		if ($('.preloader').length) {
 			$('body').addClass('page-loaded');
 			$('.preloader').delay(1000).fadeOut(300);
 		}
 	}
-	
+
 	function headerStyle() {
-		if($('.main-header').length){
+		if ($('.main-header').length) {
 			var scrollY = $(window).scrollTop();
 			var header = $('.main-header');
 			var headerTop = $('.header-top');
@@ -34,43 +34,43 @@
 			}
 		}
 	}
-	
-	$(window).on('scroll', function() {
+
+	$(window).on('scroll', function () {
 		headerStyle();
 	});
-	
+
 	headerStyle();
 
-	$(window).on('scroll', function() {
+	$(window).on('scroll', function () {
 		headerStyle();
 	});
 
-	if($('.main-header li.dropdown ul').length){
+	if ($('.main-header li.dropdown ul').length) {
 		$('.main-header .navigation li.dropdown').append('<div class="dropdown-btn"><span class="fa fa-angle-right"></span></div>');
 	}
 
-	if($('.mobile-menu').length){
+	if ($('.mobile-menu').length) {
 		$('.mobile-menu .menu-box').mCustomScrollbar();
-		
+
 		var mobileMenuContent = $('.main-header .nav-outer .main-menu').html();
 		$('.mobile-menu .menu-box .menu-outer').append(mobileMenuContent);
 		$('.sticky-header .main-menu').append(mobileMenuContent);
-		
-		$('.mobile-menu li.dropdown .dropdown-btn').on('click', function() {
+
+		$('.mobile-menu li.dropdown .dropdown-btn').on('click', function () {
 			$(this).toggleClass('open');
 			$(this).prev('ul').slideToggle(500);
 		});
 
-		$('.mobile-nav-toggler').on('click', function() {
+		$('.mobile-nav-toggler').on('click', function () {
 			$('body').addClass('mobile-menu-visible');
 		});
 
-		$('.mobile-menu .menu-backdrop,.mobile-menu .close-btn').on('click', function() {
+		$('.mobile-menu .menu-backdrop,.mobile-menu .close-btn').on('click', function () {
 			$('body').removeClass('mobile-menu-visible');
 		});
 	}
 
-	$(document).on('click', 'a[href^="#"]', function(e) {
+	$(document).on('click', 'a[href^="#"]', function (e) {
 		var targetId = $(this).attr('href');
 		if (targetId && targetId !== '#' && $(targetId).length) {
 			e.preventDefault();
@@ -82,8 +82,8 @@
 		}
 	});
 
-	if($('.scroll-to-target').length){
-		$(".scroll-to-target").on('click', function() {
+	if ($('.scroll-to-target').length) {
+		$(".scroll-to-target").on('click', function () {
 			var target = $(this).attr('data-target');
 			$('html, body').animate({
 				scrollTop: $(target).offset().top
@@ -91,7 +91,7 @@
 		});
 	}
 
-	$(window).on('scroll', function() {
+	$(window).on('scroll', function () {
 		var scrollPos = $(window).scrollTop();
 		var btn = $('#backToTop');
 
@@ -102,13 +102,13 @@
 		}
 	});
 
-	$('#backToTop').on('click', function(e) {
+	$('#backToTop').on('click', function (e) {
 		e.preventDefault();
 		$('html, body').animate({
 			scrollTop: 0
 		}, 0);
 	});
-	
+
 	function initTypewriter() {
 		var $target = $('#typewriter-text');
 		if (!$target.length) return;
@@ -142,59 +142,17 @@
 
 	function initAwardTabs() {
 		function filterCards(filterValue) {
-			var visibleIndex = 0;
-
 			$('.award-card-item').each(function() {
 				var $card = $(this);
 				var category = $card.attr('data-category');
 				var status = $card.attr('data-status');
 				var isUpcoming = status === 'upcoming' || $card.find('.award-status.upcoming').length > 0;
-
-				var shouldShow = (filterValue === 'all') ? !isUpcoming : (category === filterValue);
-
-				if (!shouldShow) {
-					$card.stop(true, true).addClass('hide').css({
-						'opacity': '0',
-						'transform': ''
-					});
-				}
-			});
-
-			$('.award-card-item').each(function() {
-				var $card = $(this);
-				var category = $card.attr('data-category');
-				var status = $card.attr('data-status');
-				var isUpcoming = status === 'upcoming' || $card.find('.award-status.upcoming').length > 0;
-
 				var shouldShow = (filterValue === 'all') ? !isUpcoming : (category === filterValue);
 
 				if (shouldShow) {
-					var delay = visibleIndex * 60;
-					visibleIndex++;
-
-					$card.removeClass('hide');
-					$card.stop(true, true).css({
-						'opacity': '0',
-						'transform': 'scale(0.92) translateY(14px)'
-					});
-
-					setTimeout(function() {
-						$card.animate({
-							'opacity': 1
-						}, {
-							duration: 300,
-							step: function(now, fx) {
-								if (fx.prop === 'opacity') {
-									var scale = 0.92 + (0.08 * now);
-									var transY = 14 * (1 - now);
-									$card.css('transform', 'scale(' + scale + ') translateY(' + transY + 'px)');
-								}
-							},
-							complete: function() {
-								$card.css({'opacity': '', 'transform': ''});
-							}
-						});
-					}, delay);
+					$card.removeClass('hide').css('opacity', '1');
+				} else {
+					$card.addClass('hide').css('opacity', '0');
 				}
 			});
 		}
@@ -204,7 +162,6 @@
 			$('.awards-tab-btn').removeClass('active');
 			$(this).addClass('active');
 
-			$('#awardsGrid').scrollLeft(0);
 			filterCards(filterValue);
 		});
 
@@ -213,7 +170,7 @@
 	}
 
 	if ($.easing) {
-		$.easing.smoothSlide = function(x, t, b, c, d) {
+		$.easing.smoothSlide = function (x, t, b, c, d) {
 			return c * (1 - Math.pow(1 - t / d, 4)) + b;
 		};
 	}
@@ -221,89 +178,112 @@
 	function initAwardsDots() {
 		var $grid = $('#awardsGrid');
 		var $dotsContainer = $('#awardsDots');
+		var trackIndex = 1;
+		var touchStartX = 0;
+		var touchStartY = 0;
+		var touchCurrentX = 0;
+		var isDragging = false;
+		var isTransitioning = false;
 
-		function getVisibleCards() {
-			return $grid.find('.award-card-item:not(.hide)');
+		function getRealCards() {
+			return $grid.find('.award-card-item:not(.hide):not(.award-card-clone)');
 		}
 
-		function resetCardOrder() {
-			var $visible = getVisibleCards();
-			if ($visible.length <= 1) return;
-
-			var sortedCards = $visible.toArray().sort(function(a, b) {
-				var idxA = parseInt($(a).attr('data-card-index'), 10) || 0;
-				var idxB = parseInt($(b).attr('data-card-index'), 10) || 0;
-				return idxA - idxB;
-			});
-
-			$.each(sortedCards, function(i, el) {
-				$grid.append(el);
-			});
-
-			$grid.scrollLeft(0);
+		function isMobile() {
+			return window.matchMedia('(max-width: 768px)').matches || $(window).width() <= 768;
 		}
 
-		function updateActiveDot() {
-			var $visible = getVisibleCards();
-			if (!$visible.length) return;
-
-			var cardWidth = $visible.first().outerWidth(true) || $grid.width();
-			if (!cardWidth) return;
-
-			var scrollPos = $grid.scrollLeft();
-			var activeIndex = Math.round(scrollPos / cardWidth);
-
-			if (activeIndex < 0) activeIndex = 0;
-			if (activeIndex >= $visible.length) activeIndex = $visible.length - 1;
-
+		function updateDotsUI(realIndex) {
 			$dotsContainer.find('.award-dot').removeClass('active');
-			$dotsContainer.find('.award-dot').eq(activeIndex).addClass('active');
+			$dotsContainer.find('.award-dot').eq(realIndex).addClass('active');
 		}
 
-		function renderDots() {
+		function setupClonesAndDots() {
+			$grid.find('.award-card-clone').remove();
 			$dotsContainer.empty();
-			resetCardOrder();
-			var $visibleCards = getVisibleCards();
 
-			if ($visibleCards.length <= 1) {
+			var $realCards = getRealCards();
+
+			if ($realCards.length <= 1 || !isMobile()) {
 				$dotsContainer.addClass('hide');
-				return;
 			} else {
 				$dotsContainer.removeClass('hide');
+
+				var $firstClone = $realCards.last().clone().addClass('award-card-clone');
+				var $lastClone = $realCards.first().clone().addClass('award-card-clone');
+
+				$grid.prepend($firstClone);
+				$grid.append($lastClone);
+
+				setTimeout(function() {
+					var cardWidth = $grid.width();
+					$grid.scrollLeft(cardWidth);
+				}, 10);
+
+				$realCards.each(function(i) {
+					var $dot = $('<button>', {
+						class: 'award-dot' + (i === 0 ? ' active' : ''),
+						'data-dot-index': i,
+						'aria-label': 'Go to card ' + (i + 1)
+					});
+
+					$dot.on('click', function(e) {
+						e.preventDefault();
+						var cardWidth = $grid.width();
+						var targetScrollLeft = (i + 1) * cardWidth;
+						if ($grid[0].scrollTo) {
+							$grid[0].scrollTo({ left: targetScrollLeft, behavior: 'smooth' });
+						} else {
+							$grid.stop(true, true).animate({ scrollLeft: targetScrollLeft }, 350);
+						}
+					});
+
+					$dotsContainer.append($dot);
+				});
 			}
-
-			$visibleCards.each(function(i) {
-				var $dot = $('<button>', {
-					class: 'award-dot' + (i === 0 ? ' active' : ''),
-					'data-dot-index': i,
-					'aria-label': 'Go to card ' + (i + 1)
-				});
-
-				$dot.on('click', function(e) {
-					e.preventDefault();
-					var cardWidth = $visibleCards.first().outerWidth(true) || $grid.width();
-					$grid.stop(true, true).animate({
-						scrollLeft: i * cardWidth
-					}, 350);
-				});
-
-				$dotsContainer.append($dot);
-			});
-
-			updateActiveDot();
 		}
 
-		$grid.off('scroll.dots').on('scroll.dots', function() {
-			updateActiveDot();
+		var scrollTimer = null;
+		$grid.off('scroll.infinite').on('scroll.infinite', function() {
+			if (!isMobile()) return;
+			
+			var cardWidth = $grid.width();
+			if (!cardWidth) return;
+			
+			var scrollPos = $grid.scrollLeft();
+			var currentIndex = Math.round(scrollPos / cardWidth);
+			var totalCards = $grid.children('.award-card-item:not(.hide)').length;
+			var $realCards = getRealCards();
+			
+			var realIndex = currentIndex - 1;
+			if (realIndex < 0) realIndex = $realCards.length - 1;
+			if (realIndex >= $realCards.length) realIndex = 0;
+			updateDotsUI(realIndex);
+
+			clearTimeout(scrollTimer);
+			scrollTimer = setTimeout(function() {
+				var newScrollPos = $grid.scrollLeft();
+				var newIndex = Math.round(newScrollPos / cardWidth);
+				
+				if (newIndex === 0) {
+					$grid.scrollLeft(cardWidth * (totalCards - 2));
+				} else if (newIndex === totalCards - 1) {
+					$grid.scrollLeft(cardWidth);
+				}
+			}, 150);
+		});
+
+		$(window).off('resize.dots').on('resize.dots', function() {
+			setupClonesAndDots();
 		});
 
 		$('.awards-tab-btn').off('click.dots').on('click.dots', function() {
 			setTimeout(function() {
-				renderDots();
-			}, 350);
+				setupClonesAndDots();
+			}, 100);
 		});
 
-		renderDots();
+		setupClonesAndDots();
 	}
 
 	function initCardLightbox() {
@@ -311,7 +291,7 @@
 		var $modalImg = $('#lightboxImg');
 		var $modalTitle = $('#lightboxTitle');
 
-		$(document).on('click', '.award-card-item', function() {
+		$(document).on('click', '.award-card-item', function () {
 			var $img = $(this).find('.award-card-img');
 			if ($img.length && $img.attr('src')) {
 				var imgSrc = $img.attr('src');
@@ -329,23 +309,23 @@
 			$('body').css('overflow', '');
 		}
 
-		$('#lightboxClose, .lightbox-backdrop').on('click', function() {
+		$('#lightboxClose, .lightbox-backdrop').on('click', function () {
 			closeModal();
 		});
 
-		$(document).on('keydown', function(e) {
+		$(document).on('keydown', function (e) {
 			if (e.key === 'Escape' && $modal.hasClass('active')) {
 				closeModal();
 			}
 		});
 	}
 
-	$(window).on('load', function() {
+	$(window).on('load', function () {
 		handlePreloader();
 		initTypewriter();
 		initAwardTabs();
 		initAwardsDots();
 		initCardLightbox();
-	});	
+	});
 
 })(window.jQuery);
