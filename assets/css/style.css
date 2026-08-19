@@ -2514,3 +2514,22 @@ li {
 	margin-top: 14px;
 	text-align: center;
 }
+
+/* ==========================================================================
+   PERFORMANCE OPTIMIZATIONS
+   ========================================================================== */
+.award-card-item,
+.hero-pildun-img,
+.lightbox-modal {
+	will-change: transform, opacity;
+}
+
+.award-card-img {
+	content-visibility: auto;
+	contain-intrinsic-size: 300px 250px;
+}
+
+.site-footer {
+	content-visibility: auto;
+	contain-intrinsic-size: 1000px 400px;
+}
